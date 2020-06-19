@@ -1,0 +1,23 @@
+---
+- name: call API ELK
+  hosts: AnsibleTower
+  tasks:
+#    - name: web server is enabled
+#      service:
+#        name: httpd
+#        state: stopped
+#    - name: call ELK
+#      uri:
+#        url: http://192.168.1.151:9200/
+#        status_code: 200
+#        return_content: yes
+#    - name: Backup OS
+#      shell: rear -d -v mkbackup
+    - include: backupos.yml
+    - name: update CVE
+      shell: yum update --cve CVE-2019-3820 -y
+      register: output
+    - name: verify cve
+      debug:
+        msg: "Not Patch"
+      when: "'Resolving Dependencies' in output.stdout"
